@@ -1,0 +1,13 @@
+[
+{
+    "title":"My computer",
+    "desc":"My computer is a Laptop",
+    "username":"john"
+},
+{
+    "username":"john",
+    "email":"john@gmail.com",
+    "password":"12345678"
+}
+
+]
