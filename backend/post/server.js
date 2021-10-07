@@ -17,15 +17,15 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // CORS
 app.use(cors());
 
-app.use("/api/post", postRouter);
+app.use("/post", postRouter);
 
 
 app.use(errorHandler);
 
-const port = process.env.PORT || 3080;
+const port = process.env.PORT || 8022;
 
 const server = app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${port} from Post`);
 });
 
 process.on("unhandledRejection", (err, promise) => {

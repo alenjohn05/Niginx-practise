@@ -1,0 +1,51 @@
+version: '3'
+services:
+  
+  mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db:/data/db
+
+  post:
+    build:
+      dockerfile: Dockerfile
+      context: ./post
+    container_name: post
+    ports:
+      - "8003:8003"
+    restart: always
+    depends_on:
+      - "mongodb"
+    volumes:
+      - .:/app
+      - /app/post/node_modules
+      
+  user:
+    build:
+      dockerfile: Dockerfile
+      context: ./user
+    container_name: user
+    ports:
+      - "8022:8022"
+    restart: always
+    depends_on:
+      - "mongodb"
+    volumes:
+      - .:/app
+      - /app/user/node_modules
+
+  
+  nginx-proxy:
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    depends_on:  
+    # servicesss
+      - post
+      - user
+    ports:
+      - "8000:8000"
+ 

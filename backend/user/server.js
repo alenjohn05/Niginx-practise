@@ -17,15 +17,15 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // CORS
 app.use(cors());
 
-app.use("/api/auth", authRouter);
+app.use("/user", authRouter);
 
 
 app.use(errorHandler);
 
-const port = process.env.PORT || 4080;
+const port = process.env.PORT || 8003;
 
 const server = app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${port} from User`);
 });
 
 process.on("unhandledRejection", (err, promise) => {

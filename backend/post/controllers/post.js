@@ -49,7 +49,7 @@ exports.updatePost = async (req, res, next) => {
 };
 
 //DELETE POST
-exports.deletePost = async (req, res) => {
+exports.deletePost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
     if (post.username === req.body.username) {
@@ -66,44 +66,46 @@ exports.deletePost = async (req, res) => {
       return next(new ErrorResponse("You can delete only your post!", 401));
     }
   } catch (error) {
-    next(error);
+    next(new ErrorResponse("Post has not deleted", 401));
   }
 };
 
 //GET POST
 
-exports.getPosts=async (req, res) => {
+exports.getPosts=async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
-    res.status(200).json({
-      success: true,
-      posts: post,
-    });
-  } catch (err) {
-    next(error)
+      if (post !== null){
+          res.status(200).json({
+              success: true,
+              posts: post,
+          });
+    }else{
+        next(new ErrorResponse("No Posts are avaliable", 401));
+    }
+  } catch (error) {
+    next(new ErrorResponse("No Post Found", 401));
   }
 };
 
 
 //GET ALL POSTS
-exports.getAllPosts = async (req, res) => {
+exports.getAllPosts = async (req, res, next) => {
   const username = req.query.user;
   const catName = req.query.cat;
   try {
     let posts;
     if (username) {
-      posts = await Post.find({ username });
-    } else if (catName) {
-      posts = await Post.find({
-        categories: {
-          $in: [catName],
-        },
-      });
-    } else {
+      posts = await Post.find({ username });GET
       posts = await Post.find();
     }
-    res.status(200).json(posts);
+    if (posts !== null){
+          res.status(200).json(posts);
+    }else{
+
+        next(new ErrorResponse("No Posts Found", 401));
+    }
   } catch (err) {
-    res.status(500).json(err);
+    next(new ErrorResponse("No Posts Found", 401));
   }
 };
